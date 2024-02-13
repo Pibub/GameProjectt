@@ -9,8 +9,8 @@ public class JavaServer {
     private int turnsMade;
     private int maxTurns;
     private int[] values;
-    private int playerOneButtonNum;
-    private int playerTwoButtonNum;
+    private int playerOneButtonNum = 0;
+    private int playerTwoButtonNum = 0;
 
     private ServerSideConnection player1;
     private ServerSideConnection player2;
@@ -37,7 +37,7 @@ public class JavaServer {
                 player1 = ssc;
             }else {
                 player2 = ssc;
-                System.out.println("Match is now started.");
+                System.out.println("----------Match is now started.----------");
             }
             Thread t = new Thread(ssc);
             t.start();
@@ -74,18 +74,21 @@ public class JavaServer {
                     if(playerID == 1){
                         playerOneButtonNum = dataIn.readInt();
                         System.out.println("Player 1 clicked button " + playerOneButtonNum);
-                    }else{
+                    }
+
+                    else{
                         playerTwoButtonNum = dataIn.readInt();
                         System.out.println("Player 2 clicked button " + playerTwoButtonNum);
                     }
                     turnsMade++;
                     if(turnsMade == maxTurns){
-                        System.out.println("Max turn has been reached.");
-                        break;
-                    }
-                    player1.closeConnection();
-                    player2.closeConnection();
+                    System.out.println("----------Max turn has been reached.----------");
+                    break;
                 }
+                player1.closeConnection();
+                player2.closeConnection();
+            }
+
             }catch (IOException exception){
                 System.out.println("IOException from run()");
             }
@@ -100,7 +103,7 @@ public class JavaServer {
         public void closeConnection(){
             try {
                 socket.close();
-                System.out.println("Connection closed.");
+                System.out.println("----------Server Connection closed.----------");
             }catch (IOException exception){
                 System.out.println("IOException for closeConnection.");
             }

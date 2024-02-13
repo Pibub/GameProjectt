@@ -44,7 +44,7 @@ public class Player extends JFrame {
 
     public void setUpUI(){
         this.setSize(width,height);
-        this.setTitle("Gladiator-Fight [Player " + playerID + "]");
+        this.setTitle("Random-Fighter [Player " + playerID + "]");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         pane.setLayout(new GridLayout(1,5));
         pane.add(message);
@@ -81,10 +81,13 @@ public class Player extends JFrame {
         buttonEnabled = false;
         if(myDamage > enemyDamage){
             message.setText("You won!\n" + "Your damage: " + myDamage + "\n" + "Enemy damage: " + enemyDamage);
-        } else if (myDamage < enemyDamage) {
+            buttonEnabled = false;
+        }if (myDamage < enemyDamage) {
             message.setText("You Lose\n"+ "Your damage: " + myDamage + "\n" + "Enemy damage: " + enemyDamage);
-        }else{
+            buttonEnabled = false;
+        }else if (myDamage == enemyDamage){
             message.setText("Tie" +"\n" + "Your damage: " + myDamage + "\n" + "Enemy damage: " + enemyDamage);
+            buttonEnabled = false;
         }
         csc.closedConnection();
     }
@@ -131,9 +134,9 @@ public class Player extends JFrame {
 
     public void updateTurn(){
         int n = csc.receiveButtonNum();
-        message.setText("Your enemy clicked button "+ n + "Now your turn.");
-        enemyDamage += values[n + 1];
-        System.out.println("Your enemy dealt "+ enemyDamage + "in total.");
+        message.setText("Your enemy clicked button Now your turn.");
+        enemyDamage += values[n+1];
+        System.out.println("Your enemy dealt "+ enemyDamage + " in total.");
         buttonEnabled = true;
         if(playerID == 1 && turnsMade == maxTurns){
             winner();
@@ -151,7 +154,7 @@ public class Player extends JFrame {
         private  DataOutputStream dataOut;
 
         public ClientSideConnection() throws IOException {
-            System.out.println("Client started.");
+            System.out.println("----------Client started.----------");
             try {
                 socket = new Socket("localhost" , 50001);
                 dataIn = new DataInputStream(socket.getInputStream());
@@ -164,10 +167,10 @@ public class Player extends JFrame {
                 values[2] = dataIn.readInt();
                 values[3] = dataIn.readInt();
                 System.out.println("maxTurns is " + maxTurns);
-                System.out.println("Value 1 is " + values[0]);
-                System.out.println("Value 2 is " + values[1]);
-                System.out.println("Value 3 is " + values[2]);
-                System.out.println("Value 4 is " + values[3]);
+                System.out.println("Value 1 is :" + values[0]);
+                System.out.println("Value 2 is :" + values[1]);
+                System.out.println("Value 3 is :" + values[2]);
+                System.out.println("Value 4 is :" + values[3]);
             }catch (IOException ex){
                 System.out.println("IOException for CSC");
             }
@@ -195,7 +198,7 @@ public class Player extends JFrame {
         public void closedConnection(){
             try {
                 socket.close();
-                System.out.println("Connection closed.");
+                System.out.println("----------Client Connection closed.----------");
             }catch (IOException exception){
                 System.out.println("IOException for closedConnection()");
             }
